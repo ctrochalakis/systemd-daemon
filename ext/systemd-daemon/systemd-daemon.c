@@ -21,7 +21,11 @@ static VALUE _sd_watchdog_enabled(VALUE mod, VALUE unset_env)
   uint64_t period;
   int r;
 
+#ifdef HAVE_SD_WATCHDOG_ENABLED
   r = sd_watchdog_enabled(FIX2INT(unset_env), &period);
+#else
+  r = 0;
+#endif
   if (r < 0)
     rb_raise(rb_eRuntimeError, "sd_watchdog_enabled returned %d", r);
   else if (r == 0)

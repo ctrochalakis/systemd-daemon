@@ -15,4 +15,6 @@ asplode('systemd/sd-daemon.h') if !sd_daemon_h
 asplode('libsystemd/libsystemd-daemon') if !have_library('systemd') && !have_library('systemd-daemon')
 asplode('sd_notify') if not have_func('sd_notify', 'systemd/sd-daemon.h')
 
+have_func('sd_watchdog_enabled')
+
 create_makefile('systemd-daemon/sd_native')
