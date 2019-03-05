@@ -28,6 +28,38 @@ Or install it yourself as:
 SystemdDaemon::Notify.ready
 ```
 
+### Notify with fds
+Sending one fd
+```ruby
+read_fd, write_fd = IO.pipe
+state = {
+  FDSTORE: 1,
+  FDNAME: pid
+}
+SystemdDaemon::Notify.notify_with_fds(0, state, read_fd.to_i)
+```
+
+Sending an array of fds
+```ruby
+read_fd1, write_fd1 = IO.pipe
+read_fd2, write_fd2 = IO.pipe
+
+fds = [read_fd1.to_i, read_fd2.to_i]
+state = {
+  FDSTORE: 1,
+  FDNAME: "testgroup"
+}
+
+SystemdDaemon::Notify.notify_with_fds(0, state, fds)
+```
+
+### Listen fds with names
+```ruby
+fds_hash = SystemdDaemon::Notify.listen_fds_with_names
+# fds_hash = {"listening_socket_a"=>3, "listening_socket_b"=>4, "listening_socket_c"=>5}
+```
+
+
 ## Contributing
 
 1. Fork it ( https://github.com/ctrochalakis/systemd-daemon/fork )
