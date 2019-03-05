@@ -10,6 +10,14 @@ module SystemdDaemon
       _sd_notify(unset_env_value(unset_env), hash_to_sd_state(state))
     end
 
+    def notify_with_fds(pid, state, fd, unset_env=false)
+      _sd_pid_notify_with_fds(pid, unset_env_value(unset_env), hash_to_sd_state(state), fd)
+    end
+
+    def listen_fds_with_names(unset_env=false)
+      _sd_listen_fds_with_names(unset_env_value(unset_env))
+    end
+
     def watchdog_timer(unset_env=false)
       _sd_watchdog_enabled(unset_env_value(unset_env))
     end

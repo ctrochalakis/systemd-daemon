@@ -55,4 +55,23 @@ class TestSystemdDaemonNotify < Test::Unit::TestCase
       assert_equal true, SystemdDaemon::Notify.watchdog?
     }
   end
+
+  def test_listen_fds_with_names
+    expected_names = { "bar" => 4, "foo" => 3 }
+    with_env('LISTEN_FDNAMES' => expected_names.keys.reverse.join(':'),
+             'LISTEN_FDS' => expected_names.size,
+             'LISTEN_PID' => $$) {
+      assert_equal expected_names, SystemdDaemon::Notify.listen_fds_with_names
+    }
+  end
+
+  def test_notify_with_fds
+    assert_socket("FDSTORE=1\nFDNAME=test") {
+      pid = 0
+      fd  = 3
+      state = { FDSTORE: 1, FDNAME: 'test' }
+
+      SystemdDaemon::Notify.notify_with_fds(pid, state, fd)
+    }
+  end
 end

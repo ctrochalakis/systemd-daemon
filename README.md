@@ -28,6 +28,23 @@ Or install it yourself as:
 SystemdDaemon::Notify.ready
 ```
 
+### Notify with fds
+```ruby
+read_fd, write_fd = IO.pipe
+state = {
+  FDSTORE: 1,
+  FDNAME: pid
+}
+SystemdDaemon::Notify.notify_with_fds(0, state, read_fd.to_i)
+```
+
+### Listen fds with names
+```ruby
+fds_hash = SystemdDaemon::Notify.listen_fds_with_names
+# fds_hash = {"5304"=>3, "5301"=>4, "5298"=>5, "5295"=>6}
+```
+
+
 ## Contributing
 
 1. Fork it ( https://github.com/ctrochalakis/systemd-daemon/fork )
